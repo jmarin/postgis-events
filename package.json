@@ -1,0 +1,29 @@
+{
+  "name": "postgis-events",
+  "version": "0.1.0",
+  "description": "Publish insert,update,delete events from a Postgis database on a websocket stream",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jmarin/postgis-events.git"
+  },
+  "keywords": [
+    "postgis",
+    "events"
+  ],
+  "author": "Juan Marin Otero <juan.marin.otero@gmail.com>",
+  "license": "Apache License v 2.0",
+  "bugs": {
+    "url": "https://github.com/jmarin/postgis-events/issues"
+  },
+  "homepage": "https://github.com/jmarin/postgis-events",
+  "dependencies": {
+    "express": "^4.4.4",
+    "pg": "^3.3.0",
+    "socket.io": "^1.0.6",
+    "socket.io-client": "^1.0.6"
+  }
+}
