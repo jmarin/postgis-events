@@ -9,11 +9,14 @@ Here are the steps necessary to configure the tables for which you want notifica
 
 ### 1. Create inserts and updates notification function
 
+The following function assumes there is a field called `gid` which is a primary key for the table
+This field is automatically created and indexed when importing Shapefiles into Postgis with the `shp2pgsql` command.
+
 ```
-CREATE FUNCTION insert_update_notify() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION insert_update_notify() RETURNS trigger AS $$
 DECLARE
 BEGIN
-  PERFORM pg_notify('inserts_updates', ST_AsGeoJSON(NEW.geometry, 2));
+  PERFORM pg_notify('inserts_updates', TG_TABLE_SCHEMA || ',' || TG_TABLE_NAME || ',' || NEW.gid);
 	return new;
 END
 $$ LANGUAGE plpgsql;

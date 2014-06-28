@@ -20,17 +20,21 @@ var testFeature = new ol.Feature({
 
 testFeature.setStyle(editStyle);
 
+//var editSource = new ol.source.GeoJSON({
+//	object: {
+//	  'type': 'GeometryCollection',
+//		'crs': {
+//		  'type': "name",
+//		  'properties': {
+//			   'name':'EPSG:3857'
+//			}
+//		}
+//	},
+//  features: features
+//});
+//
 var editSource = new ol.source.GeoJSON({
-	object: {
-	  'type': 'GeometryCollection',
-		'crs': {
-		  'type': "name",
-		  'properties': {
-			   'name':'EPSG:4326'
-			}
-		}
-	},
-  features: features
+  features: []
 });
 
 var edit = new ol.layer.Vector({
@@ -38,7 +42,8 @@ var edit = new ol.layer.Vector({
 	style: editStyle
 });
 
-function updateFeatures (geoJson) {
+function updateFeatures (msg) {
+  var geoJson = msg.st_asgeojson;
 	var geoJsonFormat = new ol.format.GeoJSON({
 	  defaultProjection: 'EPSG:4326'
 	});
@@ -47,6 +52,7 @@ function updateFeatures (geoJson) {
  	var feature = new ol.Feature({
 	  geometry: geom
 	});
+	console.log(feature);
 	editSource.addFeature(feature);
 }
 
