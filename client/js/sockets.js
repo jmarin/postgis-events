@@ -5,6 +5,6 @@ socket.on('connect', function(){
 });
 
 socket.on('pgevent', function(msg){
-  console.log(msg);							
+	updateFeatures(msg);
 });
 
