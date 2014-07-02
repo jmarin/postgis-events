@@ -10,10 +10,10 @@ Here are the steps necessary to configure the tables for which you want notifica
 ### 1. Create inserts and updates notification function
 
 ```
-CREATE FUNCTION insert_update_notify() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION insert_update_notify() RETURNS trigger AS $$
 DECLARE
 BEGIN
-  PERFORM pg_notify('inserts_updates', ST_AsGeoJSON(NEW.geometry, 2));
+  PERFORM pg_notify('inserts_updates', ST_AsGeoJSON(ST_Centroid(NEW.geometry), 2));
 	return new;
 END
 $$ LANGUAGE plpgsql;
