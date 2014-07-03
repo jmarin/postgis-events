@@ -26,7 +26,7 @@ Note: the above function assumes the geometry column's name is `geometry`
 
 ### 2. Create deletes notification function
 
-TODO
+TBD
 
 ### 3. Create triggers to send notification events
 
@@ -44,7 +44,19 @@ CREATE TRIGGER <table>_updates AFTER UPDATE ON <table>
 FOR EACH ROW EXECUTE PROCEDURE insert_update_notify();
 ```
 
+* Deletes trigger
+
+TBD
+
 ### 4. Run the service and expose events through websockets
+
+Before running the application, dependencies need to be installed by issuing: 
+
+`npm install`
+
+The service and sample client application can be run by entering the following (dev mode):
 
 `node server.js`
 
+Go to http://localhost:3000, and insert or update some data into the table for which the triggers have been configured.
+You should see the geometries being modified added to the map in real time.

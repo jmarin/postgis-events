@@ -18,13 +18,11 @@ io.on('connection', function(socket){
 		client.connect();
 		client.query('LISTEN inserts_updates');
 		client.on('notification', function(msg){
-		  //console.log(msg.payload);
 			var elems = msg.payload.split(',');
-			//console.log(elems);
 			var schema = elems[0];
 			var table_name = elems[1];
 			var id = elems[2];
-			var sql = 'SELECT ST_AsGeoJSON(' + geomColumn + ') FROM ' + schema + '.' + table_name + ' WHERE id = ' + id;
+			var sql = 'SELECT ST_AsGeoJSON(' + geomColumn + ') FROM ' + schema + '.' + table_name + ' WHERE gid = ' + id;
 		  client.query(sql, function(err, result){
 			  if (err) {
 				  return console.error('Element not found', err);
