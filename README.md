@@ -1,7 +1,8 @@
 # postgis-events
 
 A tool to publish events related to operations performed on Postgis tables.
-Insert, update and delete notifications are published through a websockets endpoint
+Insert, update and delete notifications are published through a websockets endpoint.
+A sample OpenLayers 3 application is included to view the edits in real time.
 
 ## Database preparation
 
@@ -21,8 +22,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 ```
-
-Note: the above function assumes the geometry column's name is `geometry`
 
 ### 2. Create deletes notification function
 
@@ -60,3 +59,6 @@ The service and sample client application can be run by entering the following (
 
 Go to http://localhost:3000, and insert or update some data into the table for which the triggers have been configured.
 You should see the geometries being modified added to the map in real time.
+
+This approach works well for cases where geometries are being edited individually or in small groups. For very large
+updates or bulk inserts, a different approach should probably be taken to reduce overhead in the database.
