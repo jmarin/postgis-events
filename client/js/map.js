@@ -1,3 +1,5 @@
+var maxFeatures = 100; //Maximum number of features to render at once
+
 var editSource = new ol.source.GeoJSON({
   features: []
 });
@@ -32,5 +34,9 @@ function updateFeatures (msg) {
  	var feature = new ol.Feature({
 	  geometry: geom
 	});
+	if (editSource.getFeatures().length > maxFeatures) {
+	  var lastFeature = editSource.getFeatures()[0];
+		editSource.removeFeature(lastFeature);
+	}
 	editSource.addFeature(feature);
 }
