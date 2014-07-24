@@ -11,24 +11,43 @@ var pgConString = "postgres://localhost/" + database;
 
 app.use("/", express.static(__dirname + '/client'));
 
-io.on('connection', function(socket){
-  console.log('socket.io connection established');
+var clients = [];
+
+io.on('connection', function(socket) {
+  console.log('socket.io connection established', socket.id);
 	socket.on('pgsubscribe', function(data){
-	  var client = new pg.Client(pgConString);
-		client.connect();
-		client.query('LISTEN inserts_updates');
-		client.on('notification', function(msg){
-			var elems = msg.payload.split(',');
-			var schema = elems[0];
-			var table_name = elems[1];
-			var id = elems[2];
-			var sql = 'SELECT ST_AsGeoJSON(' + geomColumn + ') FROM ' + schema + '.' + table_name + ' WHERE gid = ' + id;
-		  client.query(sql, function(err, result){
-			  if (err) {
-				  return console.error('Element not found', err);
-				}
-				socket.emit('pgevent', result.rows[0]);
-			});
+	  console.log('pgsubscribe', socket.id);
+		clients.push(socket);
+	});
+	socket.on('disconnect', function(){
+	  console.log('disconnect from', socket.id);
+		clients.splice(clients.indexOf(socket),1);
+	});
+});
+
+var db = new pg.Client(pgConString);
+db.connect();
+db.query('LISTEN inserts_updates');
+db.on('notification', function(msg) {
+  console.log('notification');
+	if (clients.length === 0) {
+	  console.log('no clients');
+		return;
+	}
+	var elems = msg.payload.split(',');
+	console.log(elems);
+	var schema = elems[0];
+	var table_name = elems[1];
+	var id = elems[2];
+	var sql = 'SELECT ST_AsGeoJSON(' + geomColumn + ') FROM ' + schema + '.' + table_name + ' WHERE gid = ' + id;
+	console.log(sql);
+	db.query(sql, function(err, result) {
+	  if (err) {
+		  return console.error('Element not found', err);
+		}
+		clients.forEach(function(c) {
+		  console.log('emit event', c.id);
+			c.emit('pgevent', result.rows[0]);
 		});
 	});
 });
