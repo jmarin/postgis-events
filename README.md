@@ -1,7 +1,7 @@
 # postgis-events
 
 A tool to publish events related to operations performed on Postgis tables.
-Insert, update and delete notifications are published through a websockets endpoint.
+Insert, update and delete notifications are published through a Socket.io endpoint.
 A sample OpenLayers 3 application is included to view the edits in real time.
 
 ## Database preparation
@@ -10,7 +10,7 @@ Here are the steps necessary to configure the tables for which you want notifica
 
 ### 1. Create inserts and updates notification function
 
-The following function assumes there is a field called `gid` which is a primary key for the table
+The following function assumes there is a field called `gid` which is a primary key for the table.
 This field is automatically created and indexed when importing Shapefiles into Postgis with the `shp2pgsql` command.
 
 ```
@@ -47,7 +47,7 @@ FOR EACH ROW EXECUTE PROCEDURE insert_update_notify();
 
 TBD
 
-### 4. Run the service and expose events through websockets
+### 4. Run the service and expose events through [Socket.io](http://socket.io/)
 
 Before running the application, dependencies need to be installed by issuing: 
 
